@@ -1,16 +1,9 @@
-"""
-WhatsAPI module
-"""
-
 import time
 import os
 from selenium import webdriver
-import datetime
-from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.proxy import Proxy, ProxyType
 
 class WhatsAPIDriver(object):
 
@@ -21,6 +14,7 @@ class WhatsAPIDriver(object):
     _SELECTORS = {
         'firstrun':"#wrapper",
         'qrCode':".qrcode > img:nth-child(4)",
+        #'qrCode':".qrcode > img",
         'mainPage':".app.two",
         'chatList':".infinite-list-viewport",
         'messageList':"#main > div > div:nth-child(1) > div > div.message-list",
@@ -77,23 +71,14 @@ class WhatsAPIDriver(object):
         script = open(os.path.join(script_path, "js_scripts/get_unread_messages.js"), "r").read()
         Store = self.driver.execute_script(script)
         return Store
-
-    def send_to_whatsapp_id(self, id, message):
+    
+    def set_ultima_msg_recebida(self, jid, idMensagem):
         try:
             script_path = os.path.dirname(os.path.abspath(__file__))
         except NameError:
             script_path = os.getcwd()
-        script = open(os.path.join(script_path, "js_scripts/send_message_to_whatsapp_id.js"), "r").read()
-        success = self.driver.execute_script(script, id, message)
-        return success
-
-    def send_to_phone_number(self, pno, message):
-        try:
-            script_path = os.path.dirname(os.path.abspath(__file__))
-        except NameError:
-            script_path = os.getcwd()
-        script = open(os.path.join(script_path, "js_scripts/send_message_to_phone_number.js"), "r").read()
-        success = self.driver.execute_script(script, pno, message)
+        script = open(os.path.join(script_path, "js_scripts/set_ultima_msg_recebida.js"), "r").read()
+        success = self.driver.execute_script(script, jid, idMensagem)
         return success
 
     def __unicode__(self):
@@ -114,4 +99,22 @@ class WhatsAPIDriver(object):
                 time.sleep(5)
         except KeyboardInterrupt:
             print "Exited"
+            
+    def send_to_whatsapp_id(self, id, message):
+        try:
+            script_path = os.path.dirname(os.path.abspath(__file__))
+        except NameError:
+            script_path = os.getcwd()
+        script = open(os.path.join(script_path, "js_scripts/send_message_to_whatsapp_id.js"), "r").read()
+        success = self.driver.execute_script(script, id, message)
+        return success
+
+    def send_to_phone_number(self, pno, message):
+        try:
+            script_path = os.path.dirname(os.path.abspath(__file__))
+        except NameError:
+            script_path = os.getcwd()
+        script = open(os.path.join(script_path, "js_scripts/send_message_to_phone_number.js"), "r").read()
+        success = self.driver.execute_script(script, pno, message)
+        return success
         
