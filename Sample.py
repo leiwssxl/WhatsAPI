@@ -2,7 +2,7 @@
 from WhatsappAPI import WhatsappAPI
 from pprint import pprint
 from Socket import Socket
-from numeroHelper import NumeroHelper
+from NumeroHelper import NumeroHelper
 from Decrypter import Decrypter
 from Ssh import Ssh
 
